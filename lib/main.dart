@@ -12,7 +12,7 @@ class GlobeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.blueGrey),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
         routes: {
           '/': (context) => IntroScreen(),
           '/bmi': (context) => BmiScreen()

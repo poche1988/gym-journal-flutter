@@ -39,49 +39,79 @@ class _BmiScreenState extends State<BmiScreen> {
       appBar: AppBar(title: Text('BMI Calculator')),
       drawer: MenuDrawer(),
       bottomNavigationBar: BottomNavigator(),
-      body: Column(
-        children: [
-          ToggleButtons(
-            children: [
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ToggleButtons(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Metric',
+                        style: TextStyle(fontSize: fontSize),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Imperial',
+                        style: TextStyle(fontSize: fontSize),
+                      )),
+                ],
+                isSelected: isSelected,
+                onPressed: selectMetricOrImperial,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: TextField(
+                controller: txtHeight,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(hintText: heightMessage),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: TextField(
+                controller: txtWeight,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(hintText: weightMessage),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: ElevatedButton(
+                  onPressed: calculateBMI,
                   child: Text(
-                    'Metric',
+                    'Calculate BMI',
                     style: TextStyle(fontSize: fontSize),
                   )),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Imperial',
-                    style: TextStyle(fontSize: fontSize),
-                  )),
-            ],
-            isSelected: isSelected,
-            onPressed: selectMetricOrImperial,
-          ),
-          TextField(
-            controller: txtHeight,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(hintText: heightMessage),
-          ),
-          TextField(
-            controller: txtWeight,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(hintText: weightMessage),
-          ),
-          ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Calculate BMI',
-                style: TextStyle(fontSize: fontSize),
-              )),
-          Text(
-            result,
-            style: TextStyle(fontSize: fontSize),
-          )
-        ],
+            ),
+            Text(
+              result,
+              style: TextStyle(fontSize: fontSize),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  void calculateBMI() {
+    double bmi = 0;
+    double height = double.tryParse(txtHeight.text) ?? 0;
+    double weight = double.tryParse(txtWeight.text) ?? 0;
+
+    if (isMetric) {
+      bmi = weight / (height * height);
+    } else {
+      bmi = weight * 703 / (height * height);
+    }
+
+    setState(() {
+      result = 'Your BMI is ' + bmi.toStringAsFixed(2);
+    });
   }
 
   void selectMetricOrImperial(value) {
